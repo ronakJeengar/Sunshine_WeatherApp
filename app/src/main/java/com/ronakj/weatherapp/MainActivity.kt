@@ -77,14 +77,24 @@ class MainActivity : AppCompatActivity() {
                 )
                 .withListener(object : MultiplePermissionsListener {
                     override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                        TODO("Not yet implemented")
+                        if (report!!.areAllPermissionsGranted()) {
+                            requestLocation()
+                        }
+
+                        if (report.isAnyPermissionPermanentlyDenied) {
+                            Toast.makeText(
+                                this@MainActivity,
+                                "You have denied location permission. Please allow it is mandatory.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
 
                     override fun onPermissionRationaleShouldBeShown(
                         permissions: MutableList<com.karumi.dexter.listener.PermissionRequest>?,
                         token: PermissionToken?
                     ) {
-                        TODO("Not yet implemented")
+                        showRationalDialogForPermission()
                     }
                 }).onSameThread()
                 .check()
